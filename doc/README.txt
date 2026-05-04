@@ -67,6 +67,3 @@ NOTES COMPLÉMENTAIRES
 - Les modèles réutilisables se trouvent dans /includes/.
 - Les actions liées à la base de données sont gérées par les scripts dans /php/.
 - Version en ligne : https://roommates.free.nf/roommates-app/
-
-Dernière mise à jour de la base : 2026-05-03
-Version du projet : 1.0
