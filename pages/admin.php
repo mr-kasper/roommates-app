@@ -1,4 +1,16 @@
 <?php
+/**
+ * Admin Moderation Dashboard
+ * 
+ * Protected admin panel for marketplace monitoring and moderation.
+ * Displays:
+ * - Recent users and listings
+ * - Open listing reports and flag reasons
+ * - Pending verification requests
+ * - Recent messages
+ * Allows admins to take action on reports and verify user documents.
+ * Requires admin role (checked via require_admin).
+ */
 require_once __DIR__ . '/../config.php';
 require_admin('dashboard.php');
 

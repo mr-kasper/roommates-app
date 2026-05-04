@@ -1,4 +1,15 @@
 <?php
+/**
+ * User Registration Action Handler
+ * 
+ * Processes new user account creation. Validates input fields:
+ * - Name, email, age (16-99), gender, city required
+ * - Password minimum 6 characters
+ * - Email must be unique (checked via PDO)
+ * Hashes password using bcrypt (PASSWORD_DEFAULT).
+ * On success: Creates user, logs activity, starts session, redirects to dashboard.
+ * On failure: Stores old input and redirects back with error message.
+ */
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';

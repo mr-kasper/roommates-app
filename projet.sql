@@ -119,10 +119,9 @@ CREATE TABLE IF NOT EXISTS activity_logs (
     CONSTRAINT fk_activity_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
-USE roommates_db;
-
 INSERT INTO users (name, email, password, age, gender, city) VALUES
-('Admin User', 'admin@roommates.local', '$2y$12$8Kf4008c4MILfTR/fCudjOo/Ro3zegz2jwocmZd1WeXruam5nb1IO', 32, 'Other', 'Casablanca'),
+('Admin User', 'admin@roommates.local', '$2y$12$8Kf4008c4MILfTR/fCudjOo/Ro3zegz2jwocmZd1WeXruam5nb1IO', 32, 'Male', 'Casablanca'),
+('ENSIASD', 'ENSIASD@gmail.com', '$2y$12$XaXRKYw2LDmN54qlaErrfuQlFzzG6nW0wi4.K4//ceH569sHraxHO', 32, 'Male', 'Casablanca'),
 ('Sara El Amrani', 'sara@example.com', '$2y$12$3z5x4fxp.ADQRdsInQq9meNRJqbOuo7gZtuxEDj17FVuUY0UFIFt6', 24, 'Female', 'Rabat'),
 ('Youssef Benali', 'youssef@example.com', '$2y$12$NRFgBzykwlVq9O.Hy2IMYuO7LQxPCuEbyu46Og/UqI5XQ5qRq15/O', 26, 'Male', 'Casablanca'),
 ('Mariam El Idrissi', 'mariam@example.com', '$2y$12$m7vweUg9GWZ8iM5ys1rRIOqycZysqLEdBB/CQSTaBs9d8iSyrFHRy', 23, 'Female', 'Marrakech')
@@ -137,6 +136,7 @@ UPDATE users
 SET
 	plan_tier = CASE email
 		WHEN 'admin@roommates.local' THEN 'verified'
+        WHEN 'ENSIASD@gmail.com' THEN 'verified'
 		WHEN 'sara@example.com' THEN 'pro'
 		WHEN 'youssef@example.com' THEN 'free'
 		WHEN 'mariam@example.com' THEN 'verified'
@@ -144,6 +144,7 @@ SET
 	END,
 	verification_status = CASE email
 		WHEN 'admin@roommates.local' THEN 'verified'
+        WHEN 'ENSIASD@gmail.com' THEN 'verified'
 		WHEN 'mariam@example.com' THEN 'verified'
 		WHEN 'sara@example.com' THEN 'none'
 		WHEN 'youssef@example.com' THEN 'none'
@@ -251,6 +252,14 @@ JOIN listings l ON l.user_id = (SELECT id FROM users WHERE email = 'sara@example
 WHERE u.email = 'youssef@example.com'
 AND NOT EXISTS (
 	SELECT 1 FROM favorites f WHERE f.user_id = u.id AND f.listing_id = l.id
+)
+UNION ALL
+SELECT u.id, l.id
+FROM users u
+JOIN listings l ON l.user_id = (SELECT id FROM users WHERE email = 'mariam@example.com' LIMIT 1) AND l.budget = 2100
+WHERE u.email = 'admin@roommates.local'
+AND NOT EXISTS (
+    SELECT 1 FROM favorites f WHERE f.user_id = u.id AND f.listing_id = l.id
 );
 
 INSERT INTO saved_searches (user_id, city, budget_max)
@@ -260,7 +269,11 @@ WHERE u.email = 'sara@example.com'
 UNION ALL
 SELECT u.id, 'Rabat', 2800
 FROM users u
-WHERE u.email = 'youssef@example.com';
+WHERE u.email = 'youssef@example.com'
+UNION ALL
+SELECT u.id, 'Marrakech', 2200
+FROM users u
+WHERE u.email = 'mariam@example.com';
 
 INSERT INTO notifications (user_id, title, body)
 SELECT u.id, 'Welcome to Pro plan', 'Your account was upgraded to Pro for demo purposes.'
@@ -276,6 +289,15 @@ FROM users u
 WHERE u.email = 'mariam@example.com';
 
 INSERT INTO verification_requests (user_id, document_url, note, status, reviewed_by, reviewed_at)
+SELECT u.id, 'https://example.com/verification/sara', 'Student card and enrollment proof.', 'pending', NULL, NULL
+FROM users u
+WHERE u.email = 'sara@example.com'
+UNION ALL
+SELECT u.id, 'https://example.com/verification/youssef', 'ID card and utility bill.', 'pending', NULL, NULL
+FROM users u
+WHERE u.email = 'youssef@example.com';
+
+INSERT INTO verification_requests (user_id, document_url, note, status, reviewed_by, reviewed_at)
 SELECT u.id, 'https://example.com/verification/mariam', 'Student card attached.', 'approved', a.id, NOW()
 FROM users u
 JOIN users a ON a.email = 'admin@roommates.local'
@@ -286,6 +308,33 @@ SELECT l.id, u.id, 'Possible outdated availability status.', 'open'
 FROM users u
 JOIN listings l ON l.user_id = (SELECT id FROM users WHERE email = 'youssef@example.com' LIMIT 1) AND l.budget = 3200
 WHERE u.email = 'sara@example.com';
+
+INSERT INTO listing_reports (listing_id, reporter_id, reason, status)
+SELECT l.id, u.id, 'Listing content appears incomplete.', 'open'
+FROM users u
+JOIN listings l ON l.user_id = (SELECT id FROM users WHERE email = 'sara@example.com' LIMIT 1) AND l.budget = 2500
+WHERE u.email = 'mariam@example.com'
+UNION ALL
+SELECT l.id, u.id, 'Possible duplicate contact details.', 'reviewed'
+FROM users u
+JOIN listings l ON l.user_id = (SELECT id FROM users WHERE email = 'mariam@example.com' LIMIT 1) AND l.budget = 2100
+WHERE u.email = 'admin@roommates.local';
+
+INSERT INTO blocked_users (user_id, blocked_user_id)
+SELECT u.id, b.id
+FROM users u
+JOIN users b ON b.email = 'youssef@example.com'
+WHERE u.email = 'sara@example.com'
+UNION ALL
+SELECT u.id, b.id
+FROM users u
+JOIN users b ON b.email = 'admin@roommates.local'
+WHERE u.email = 'youssef@example.com'
+UNION ALL
+SELECT u.id, b.id
+FROM users u
+JOIN users b ON b.email = 'sara@example.com'
+WHERE u.email = 'mariam@example.com';
 
 INSERT INTO activity_logs (user_id, event_type, details)
 SELECT u.id, 'login', 'Demo login'

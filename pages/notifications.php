@@ -1,4 +1,12 @@
 <?php
+/**
+ * Notifications Page
+ * 
+ * Displays all notifications for authenticated user, sorted by newest first.
+ * Shows notification title, body, read status, and creation timestamp.
+ * Retrieved from database via PDO prepared statement.
+ * Requires user login.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Add Listing Page
+ * 
+ * Form for authenticated users to create a new roommate listing.
+ * Captures budget, move-in date, status, and preferences (sleep schedule, smoking, pets, study).
+ * Optionally accepts image upload. Form submits to php/add_listing_action.php.
+ * Requires user login; new listing is linked to current user's account.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 

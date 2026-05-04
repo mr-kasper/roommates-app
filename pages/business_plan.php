@@ -1,4 +1,13 @@
 <?php
+/**
+ * Business Plan Page
+ * 
+ * Public-facing page presenting the business model and metrics.
+ * Displays marketplace overview: total users, listings, messages.
+ * Includes value proposition, revenue strategy, and rollout plan.
+ * Accessible to both logged-in and guest users.
+ * Retrieves aggregated business statistics via helper function.
+ */
 require_once __DIR__ . '/../config.php';
 
 $overview = get_business_overview($pdo);

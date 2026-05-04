@@ -1,4 +1,12 @@
 <?php
+/**
+ * Search Listings Page
+ * 
+ * Allows users to search and filter roommate listings by city and budget.
+ * Displays compatibility scores for logged-in users based on profile attributes.
+ * Includes favorites toggle and safe pagination.
+ * Calls search_action.php for filtering logic; uses PDO prepared statements.
+ */
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../php/search_action.php';
 
@@ -97,19 +105,13 @@ prepare('SELECT listing_id FROM favorites WHERE user_id = ?'); $favoriteStmt->ex
           <?php if ((string)$listing['verification_status'] === 'verified'): ?>
           <span class="badge-soft">Verified</span>
           <?php endif; ?>
-          <span class="badge-soft text-capitalize">
-            <?= e((string)$listing['plan_tier']) ?>
-            plan
-          </span>
+          <span class="badge-soft text-capitalize"><?= e((string)$listing['plan_tier']) ?> plan</span>
         </div>
         <h2 class="h4 mb-0"><?= e((string)$listing['name']) ?></h2>
       </div>
       <div class="text-end">
         <div class="copy-muted small">Budget</div>
-        <strong>
-          <?= number_format((int)$listing['budget']) ?>
-          MAD
-        </strong>
+        <strong><?= number_format((int)$listing['budget']) ?> MAD</strong>
       </div>
     </div>
     <?php if (!empty($listing['image_path'])): $raw = (string)$listing['image_path']; if (preg_match('#^https?://#i', $raw)) { $imgSrc = $raw; } elseif (strpos($raw, ASSETS_URL) === 0 || strpos($raw, '/') === 0) { $imgSrc = $raw; } else { $imgSrc = rtrim(ASSETS_URL, '/') . '/' . ltrim($raw, '/'); } ?>

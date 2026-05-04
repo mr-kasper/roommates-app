@@ -1,4 +1,14 @@
 <?php
+/**
+ * Contact Users Page
+ * 
+ * Allows authenticated users to initiate contact with other users.
+ * Displays list of contactable users (excludes blocked users).
+ * Optionally pre-selects a receiver if receiver_id provided in GET.
+ * Uses PDO prepared statements to safely query users and blocks.
+ * Provides message compose form linked to chat_send.php.
+ * Requires user login.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 
@@ -12,8 +22,7 @@ $usersStmt = $pdo->prepare('SELECT u.id, u.name, u.city
     AND NOT EXISTS (
       SELECT 1 FROM blocked_users b
       WHERE (b.user_id = ? AND b.blocked_user_id = u.id)
-         OR (b.user_id = u.id AND b.blocked_user_id = ?)
-    )
+         OR (b.user_id = u.id AND b.blocked_user_id = ?))
   ORDER BY u.name ASC');
 $usersStmt->execute([current_user_id(), current_user_id(), current_user_id()]);
 $users = $usersStmt->fetchAll();

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Chat / Messaging Page
+ * 
+ * Authenticated user messaging interface. Shows:
+ * - List of conversation threads with last message timestamp and unread count
+ * - Full conversation history when a receiver is selected
+ * Validates receiver exists and checks block status between users.
+ * Marks messages as read when conversation is opened.
+ * Uses PDO prepared statements for all queries.
+ * Requires user login.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 

@@ -1,4 +1,17 @@
 <?php
+/**
+ * Listing Detail Page
+ * 
+ * Displays full details of a single roommate listing with:
+ * - Listing info: budget, move-in date, preferences, status
+ * - Owner profile: name, city, verification, preferences
+ * - Compatibility score for logged-in viewers
+ * - Favorite toggle for authenticated users
+ * - Related listings in same city
+ * Validates listing visibility (open/active), ownership, block status.
+ * Uses multiple PDO prepared statements for safe queries.
+ * Accessible to public and logged-in users with appropriate restrictions.
+ */
 require_once __DIR__ . '/../config.php';
 
 $listingId = (int)($_GET['id'] ?? 0);
@@ -13,7 +26,10 @@ prepare('SELECT l.id, l.user_id, l.budget, l.move_in_date, l.preferences, l.stat
   <div class="row g-4 align-items-center position-relative" style="z-index: 1">
     <div class="col-lg-8">
       <div class="section-kicker mb-2">Listing details</div>
-      <h1 class="h2 mb-2"><?= e((string)$listing['name']) ?> in <?= e((string)$listing['city']) ?></h1>
+      <h1 class="h2 mb-2">
+        <?= e((string)$listing['name']) ?>
+        in <?= e((string)$listing['city']) ?>
+      </h1>
       <p class="lead-copy mb-0">A full view of listing terms, status, and compatibility context before contacting.</p>
     </div>
     <div class="col-lg-4">
@@ -37,7 +53,10 @@ prepare('SELECT l.id, l.user_id, l.budget, l.move_in_date, l.preferences, l.stat
 
       <div class="d-flex mb-3 flex-wrap gap-2">
         <span class="badge-soft"><?= e((string)$listing['city']) ?></span>
-        <span class="badge-soft text-capitalize"><?= e((string)$listing['plan_tier']) ?> plan</span>
+        <span class="badge-soft text-capitalize">
+          <?= e((string)$listing['plan_tier']) ?>
+          plan
+        </span>
         <?php if ((string)$listing['verification_status'] === 'verified'): ?>
         <span class="badge-soft">Verified</span>
         <?php endif; ?>
@@ -132,11 +151,17 @@ prepare('SELECT l.id, l.user_id, l.budget, l.move_in_date, l.preferences, l.stat
         </div>
         <div class="text-end">
           <div class="small text-muted">Budget</div>
-          <strong><?= number_format((int)$related['budget']) ?> MAD</strong>
+          <strong>
+            <?= number_format((int)$related['budget']) ?>
+            MAD
+          </strong>
         </div>
       </div>
       <div class="d-flex mt-2 flex-wrap gap-2">
-        <span class="badge-soft text-capitalize"><?= e((string)$related['plan_tier']) ?> plan</span>
+        <span class="badge-soft text-capitalize">
+          <?= e((string)$related['plan_tier']) ?>
+          plan
+        </span>
         <?php if ((string)$related['verification_status'] === 'verified'): ?>
         <span class="badge-soft">Verified</span>
         <?php endif; ?>

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Login Action Handler
+ * 
+ * Processes user authentication. Validates email and password against database.
+ * Uses PDO prepared statements to safely query user table.
+ * Verifies password using bcrypt (password_verify).
+ * On success: Creates session and redirects to dashboard or return_to parameter.
+ * On failure: Logs failed attempt and redirects back to login with error message.
+ * Guests only (redirects logged-in users to dashboard).
+ */
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';

@@ -1,4 +1,13 @@
 <?php
+/**
+ * User Profile Page
+ * 
+ * Displays and allows editing of user profile information.
+ * Shows plan tier, verification status, and preference attributes (sleep, smoking, pets, study).
+ * Includes form to update profile fields and upload verification documents.
+ * Uses PDO prepared statements to fetch and update user data.
+ * Requires user login.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 

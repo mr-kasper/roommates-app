@@ -1,4 +1,16 @@
 <?php
+/**
+ * Admin Action Handler
+ * 
+ * Processes admin moderation actions: approve/reject verification, remove listings, flag reports.
+ * Validates action type and target ID.
+ * Uses switch statement to handle different action types:
+ * - 'listing': Update listing status (visible/hidden/deleted)
+ * - 'verification': Approve or reject user verification requests
+ * - 'report': Mark report as handled/dismissed
+ * All changes logged via log_activity().
+ * Requires admin role, POST method, and valid CSRF token.
+ */
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';

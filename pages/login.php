@@ -1,4 +1,11 @@
 <?php
+/**
+ * Login Page
+ * 
+ * Displays the user authentication form. Guests only (redirects logged-in users to dashboard).
+ * Form submits to php/login_user.php for validation and session creation.
+ * Supports return_to parameter to redirect users after successful login.
+ */
 require_once __DIR__ . '/../config.php';
 require_guest('dashboard.php');
 

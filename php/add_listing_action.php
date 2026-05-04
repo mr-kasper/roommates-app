@@ -1,4 +1,15 @@
 <?php
+/**
+ * Add Listing Action Handler
+ * 
+ * Creates a new roommate listing for authenticated user.
+ * Validates budget, move-in date, preferences text, status, and expiration days.
+ * Optional image upload: Validates MIME type (PNG, JPEG, WebP), stores in uploads/listings/.
+ * Calculates expiration date (current + N days, 7-180 day range).
+ * Uses PDO prepared statements for secure insertion.
+ * On success: Logs activity and redirects to dashboard.
+ * Requires user login and POST method.
+ */
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';

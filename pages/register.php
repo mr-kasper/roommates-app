@@ -1,4 +1,11 @@
 <?php
+/**
+ * User Registration Page
+ * 
+ * Displays the registration form for new users. Guests only (redirects logged-in users).
+ * Collects name, email, password, age, gender, and city.
+ * Form submits to php/register_user.php for validation and account creation.
+ */
 require_once __DIR__ . '/../config.php';
 require_guest('dashboard.php');
 

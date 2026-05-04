@@ -1,4 +1,14 @@
 <?php
+/**
+ * User Dashboard Page
+ * 
+ * Protected dashboard for authenticated users. Displays:
+ * - Active listings with status and expiration
+ * - Recent sent/received messages
+ * - User statistics (profile score, listing count, message activity)
+ * - Quick action links to profile, add listing, and chat
+ * Requires user login; shows user-specific data via PDO queries.
+ */
 require_once __DIR__ . '/../config.php';
 require_login();
 
@@ -18,7 +28,10 @@ prepare('SELECT id, budget, move_in_date, preferences, status, expires_at, image
       <div class="card-soft p-4">
         <div class="badge-soft mb-3">Account health</div>
         <div class="mini-metric mb-3">
-          <span class="mini-metric-value"><?= $stats['profile_score'] ?> %</span>
+          <span class="mini-metric-value">
+            <?= $stats['profile_score'] ?>
+            %
+          </span>
           <span class="mini-metric-label">Profile completeness</span>
         </div>
         <div class="copy-muted small mb-0">A complete profile and a live listing create a stronger first impression for prospects.</div>
@@ -71,7 +84,10 @@ prepare('SELECT id, budget, move_in_date, preferences, status, expires_at, image
           <div class="section-kicker mb-2">Your listings</div>
           <h2 class="h3 mb-0">Published roommate offers</h2>
         </div>
-        <span class="badge-soft"><?= count($listings) ?> total</span>
+        <span class="badge-soft">
+          <?= count($listings) ?>
+          total
+        </span>
       </div>
 
       <?php if (!$listings): ?>
@@ -93,7 +109,10 @@ prepare('SELECT id, budget, move_in_date, preferences, status, expires_at, image
                 <span class="badge-soft">Budget</span>
                 <span class="badge-soft text-capitalize"><?= e((string)$listing['status']) ?></span>
               </div>
-              <h3 class="h4 mb-0"><?= number_format((int)$listing['budget']) ?> MAD</h3>
+              <h3 class="h4 mb-0">
+                <?= number_format((int)$listing['budget']) ?>
+                MAD
+              </h3>
             </div>
             <div class="copy-muted small text-end">
               <div>Move-in date</div>

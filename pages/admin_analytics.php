@@ -1,4 +1,15 @@
 <?php
+/**
+ * Admin Analytics Dashboard
+ * 
+ * Advanced admin reporting: Shows 7-day activity trends and conversion metrics.
+ * Displays:
+ * - Active users per day (from activity_logs)
+ * - Total events per day
+ * - Conversion signals: total users, listings, messages
+ * Uses PDO queries on activity_logs table for time-series data.
+ * Protected by require_admin() — admin access only.
+ */
 require_once __DIR__ . '/../config.php';
 require_admin('dashboard.php');
 
